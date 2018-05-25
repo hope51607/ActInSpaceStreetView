@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <p id='test'></p>
+</body>
+</html>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    function getLocation() {
+        var pos
+        var weather
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(getWeather,showError);
+        } else { 
+        }
+    }
+
+    function showError(error)
+    {
+    switch(error.code) 
+        {
+        case error.PERMISSION_DENIED:
+        x.innerHTML="User denied the request for Geolocation."
+        break;
+        case error.POSITION_UNAVAILABLE:
+        x.innerHTML="Location information is unavailable."
+        break;
+        case error.TIMEOUT:
+        x.innerHTML="The request to get user location timed out."
+        break;
+        case error.UNKNOWN_ERROR:
+        x.innerHTML="An unknown error occurred."
+        break;
+        }
+    }
+
+    function getWeather(position){
+        pos=position
+        console.log("Latitude: " + position.coords.latitude + 
+        "<br>Longitude: " + position.coords.longitude)
+        url='http://api.tecyt.com/api/API0103Weather/GetCountryWeatherByLocation?longitude='+position.coords.longitude+'&latitude='+position.coords.latitude+'&weatherDataType=Hours72&weatherSupportedLanguage=ChineseTraditional'
+        $.get({
+            url: url,
+            success:function(res){
+                console.log(res)
+                // $('#test').text(JSON.stringify(res))
+                now_date=new Date()
+                var contury=res[0]
+                var WeatherDescription=contury['WeatherDescription']
+                var i,mn=new Date(99999999999999),mni
+                for(i=0;i<WeatherDescription.length;i++){
+                    tmpDate=new Date(WeatherDescription[i]['StartDateTime'])
+                    console.log(now_date+'\n'+tmpDate)
+                    if(Math.abs(now_date-tmpDate)<mn){
+                        mni=i;
+                        mn=Math.abs(now_date-tmpDate)
+                    }
+                }
+                // console.log(mni)
+                weather=WeatherDescription[mni]['Description']
+                // console.log(weather)
+            },
+            error:function(err){
+                console.log('QQ')
+                console.log(err)
+            }
+        })
+
+    }
+</script>
