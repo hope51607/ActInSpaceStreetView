@@ -62,20 +62,27 @@ $(document).ready(function(){
             zoom: 13,
             center: array[0]
         });
+        var time=0
         array.forEach(point => {
-            var marker = new google.maps.Marker({
-                position: point,
-                map: map
-            });
-            marker.addListener('click', function() {
-               alert("YAA") 
-            });
+            setTimeout(function(){
+                var marker = new google.maps.Marker({
+                    position: point,
+                    map: map,
+                    // draggable: true,
+                    animation: google.maps.Animation.DROP,
+                });
+                marker.addListener('click', function() {
+                   alert("YAA") 
+                });
+            },time+=200) 
         });
         position={lat: position.coords.latitude, lng: position.coords.longitude}
         getNearest(position);
         getWeather(position)
         getAQI(position)
     }
+
+   
 
     function getAQI(position){
         $.get({
