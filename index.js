@@ -1,4 +1,10 @@
 $(document).ready(function(){
+    var 天氣,空氣,路況
+    var check={
+        '天氣':false,
+        '空氣':false,
+        '路況':false
+    }
     function getLocation() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(initMap,showError);
@@ -48,7 +54,8 @@ $(document).ready(function(){
                 // console.log(mni)
                 weather=WeatherDescription[mni]['Description']
                 console.log("天氣狀況: "+weather)
-                $('#天氣').text("天氣狀況: "+weather.split('。')[0])
+                天氣="天氣狀況: "+weather
+                check.天氣=true
             },
             error:function(err){
                 console.log('QQ')
@@ -94,6 +101,9 @@ $(document).ready(function(){
           position: latLng,
           map: map
         });
+        getNearest(position);
+        getWeather(position)
+        getAQI(position)
         geocodeLatLng(map,position)
     }
     function geocodeLatLng(map,position) {
@@ -103,22 +113,24 @@ $(document).ready(function(){
         geocoder.geocode({'location': latlng}, function(results, status) {
           if (status === 'OK') {
             if (results[0]) {
-                console.log(results)
+                // console.log(results)
+                while(!(check.天氣&&check.空氣&&check.路況)){
+                    
+                    console.log(check)
+                }
+                check.天氣=check.空氣=check.路況=false
                 var contentString=
                 '<div id="noDemo">'+
                 '<strong id="地址">'+results[0].formatted_address+'</strong>'+
-                '<p id="空氣"></p>'+
-                '<p id="天氣"></p>'+
-                '<p id="路況"></p>'+
+                '<p id="空氣">'+空氣+'</p>'+
+                '<p id="天氣">'+天氣+'</p>'+
+                '<p id="路況">'+路況+'</p>'+
                 '</div>'
                 var infowindow = new google.maps.InfoWindow({
                     content: contentString
                 });
                 infowindow.open(map, marker);
                 map.panTo(latlng);
-                getNearest(position);
-                getWeather(position)
-                getAQI(position)
             } else {
               window.alert('No results found');
             }
@@ -143,7 +155,11 @@ $(document).ready(function(){
                 });
                 // console.log(nowArea)
                 console.log('空氣品質: '+nowArea['Status'])
-                $('#空氣').text('空氣品質: '+nowArea['Status'])
+               空氣='空氣品質: '+nowArea['Status']
+               check.空氣=true
+            },
+            error:function(err){
+                console.log(err)
             }
         })
     }
@@ -298,7 +314,8 @@ $(document).ready(function(){
         var 燈號=["綠","橘","紅"]
         var tmp=maxnode.getElementsByTagName("vd:MOELevel")[0].textContent
         console.log("交通狀況: " + 燈號[tmp])
-        $('#路況').text("交通狀況: " + 燈號[tmp])
+        路況="交通狀況: " + 燈號[tmp]
+        check.路況=true;
     }
 
     function getNearestUbike(position){
