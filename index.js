@@ -72,6 +72,21 @@ $(document).ready(function(){
             position: uluru,
             map: map
         });
+        marker.addListener('click', function() {
+           alert("YAA") 
+        });
+
+    }
+
+    function creatpoint(lat,lng){
+        var point = new google.maps.LatLng(
+            parseFloat(markerElem.getAttribute('lat')),
+            parseFloat(markerElem.getAttribute('lng'))
+        );
+        var marker = new google.maps.Marker({
+            map: map,
+            position: point
+        });
     }
 
     getLocation()
