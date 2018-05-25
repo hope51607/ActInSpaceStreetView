@@ -301,6 +301,38 @@ $(document).ready(function(){
         console.log("交通狀況: " + 燈號[tmp])
     }
 
+    function getNearestUbike(position){
+        let req = new XMLHttpRequest();
+    
+        // You gotta trick it into downloading binary.
+        req.open('GET', "https://tcgbusfs.blob.core.windows.net/blobyoubike/YouBikeTP.gz", false);  
+        req.send(null);
+    
+        // Check for any error....
+        if (req.status != 200) {
+            return '';
+        }
+    
+        // Here's our raw binary.
+        let rawfile = req.responseText;
+        
+        let ubike = JSON.parse(rawfile);
+        //console.log("",ubike.retVal);
+        let max = Number.MAX_VALUE;
+        let maxNode;
+        let posi = Object();
+        posi.x = position.coords.longitude;
+        posi.y =  position.coords.latitude;
+        for(let attr in ubike.retVal) {
+            let temp = Math.pow((Number(ubike.retVal[attr].lng) - posi.x),2) + Math.pow((Number(ubike.retVal[attr].lat) - posi.y),2)
+            if (temp < max){
+                max = temp;
+                maxNode = ubike.retVal[attr];
+            }
+        }
+        console.log("",maxNode);
+    }
+
     getLocation()
 
     function scene(scene_number,traffic){
