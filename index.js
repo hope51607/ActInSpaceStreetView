@@ -63,31 +63,23 @@ $(document).ready(function(){
     
     }
     function initMap(position) {
-        var uluru = {lat: position.coords.latitude, lng: position.coords.longitude};
-        var map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 4,
-            center: uluru
-        });
-        var marker = new google.maps.Marker({
-            position: uluru,
-            map: map
-        });
-        marker.addListener('click', function() {
-           alert("YAA") 
-        });
-
-    }
-
-    function creatpoint(lat,lng){
-        var point = new google.maps.LatLng(
-            parseFloat(markerElem.getAttribute('lat')),
-            parseFloat(markerElem.getAttribute('lng'))
-        );
-        var marker = new google.maps.Marker({
-            map: map,
-            position: point
+        var array = [{lat: position.coords.latitude, lng: position.coords.longitude}];
+        array.forEach(point => {
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 4,
+                center: point
+            });
+            var marker = new google.maps.Marker({
+                position: point,
+                map: map
+            });
+            marker.addListener('click', function() {
+               alert("YAA") 
+            });
+    
         });
     }
+
 
     getLocation()
 
