@@ -5,25 +5,24 @@ $(document).ready(function(){
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(initMap,showError);
         } else { 
+            alert("可以拜託給個資料嗎ＱＱ");
         }
     }
     
-    function showError(error)
-    {
-    switch(error.code) 
-        {
-        case error.PERMISSION_DENIED:
-        console.log("User denied the request for Geolocation.")
-        break;
-        case error.POSITION_UNAVAILABLE:
-        console.log("Location information is unavailable.")
-        break;
-        case error.TIMEOUT:
-        console.log("The request to get user location timed out.")
-        break;
-        case error.UNKNOWN_ERROR:
-        console.log("An unknown error occurred.")
-        break;
+    function showError(error){
+        switch(error.code){
+            case error.PERMISSION_DENIED:
+                console.log("User denied the request for Geolocation.")
+                break;
+            case error.POSITION_UNAVAILABLE:
+                console.log("Location information is unavailable.")
+                break;
+            case error.TIMEOUT:
+                console.log("The request to get user location timed out.")
+                break;
+            case error.UNKNOWN_ERROR:
+                console.log("An unknown error occurred.")
+                break;
         }
     }
     
@@ -63,12 +62,13 @@ $(document).ready(function(){
     
     }
     function initMap(position) {
+        pos = position;
         var array = [{lat: position.coords.latitude, lng: position.coords.longitude}];
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 13,
+            center: array[0]
+        });
         array.forEach(point => {
-            var map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 4,
-                center: point
-            });
             var marker = new google.maps.Marker({
                 position: point,
                 map: map
@@ -76,11 +76,183 @@ $(document).ready(function(){
             marker.addListener('click', function() {
                alert("YAA") 
             });
-    
         });
+        getNearest(position);
     }
 
 
+    function fly(){
+        let string = "<img src='auto-1941991_960_720.png' style='z-index: 1000; position: absolute; width: 20%;top: 100%; left: "+(Math.floor((Math.random()*50)-10))+"%;'>";
+        //console.log(string);
+        let newCar =  $( string );
+        newCar.appendTo('div');
+        //console.log(newCar[0].parentElement);
+        Velocity(newCar[0], {
+            top : 580,
+            left : 350,
+            width: 0,
+        }, {
+            duration: 4000,
+            easing: [ 0.3, 0.5, 0.83, 0.67 ],
+            complete: function(elements) {
+                elements[0].remove();
+                fly();
+            }
+        });
+    }
+
+    function loadCompressedASCIIFile(request_url) {
+
+        var req = new XMLHttpRequest();
+
+        // You gotta trick it into downloading binary.
+        req.open('GET', request_url, false);
+        req.overrideMimeType('text\/plain; charset=x-user-defined');    
+        req.send(null);
+
+        // Check for any error....
+        if (req.status != 200) {
+            return '';
+        }
+
+        // Here's our raw binary.
+        var rawfile = req.responseText;
+
+        // Ok you gotta walk all the characters here
+        // this is to remove the high-order values.
+
+        // Create a byte array.
+        var bytes = [];
+
+        // Walk through each character in the stream.
+        for (var fileidx = 0; fileidx < rawfile.length; fileidx++) {
+            var abyte = rawfile.charCodeAt(fileidx) & 0xff;
+            bytes.push(abyte);
+        }
+
+        // Instantiate our zlib object, and gunzip it.    
+        // Requires: http://goo.gl/PIqhbC [github]
+        // (remove the map instruction at the very end.)
+        var  gunzip  =  new  Zlib.Gunzip ( bytes ); 
+        var  plain  =  gunzip.decompress ();
+
+        // Now go ahead and create an ascii string from all those bytes.
+        var asciistring = "";
+        for (var i = 0; i < plain.length; i++) {         
+            asciistring += String.fromCharCode(plain[i]);
+        }
+
+        return asciistring;
+    }
+
+    // credit to: https://webcache.googleusercontent.com/search?q=cache:tB5exByvgx4J:https://blog.csdn.net/yjukh/article/details/5213577+&cd=7&hl=zh-TW&ct=clnk&gl=tw
+    function GetPointDistance(p1, p2){
+        return Math.sqrt((p1.x-p2.x)*(p1.x-p2.x)+(p1.y-p2.y)*(p1.y-p2.y));
+    }
+    function GetNearestDistance(PA, PB, P3){
+
+        //----------图2--------------------
+        let a,b,c;
+        a=GetPointDistance(PB,P3);
+        // if(a<=0.00001)
+        // return 0;
+        b=GetPointDistance(PA,P3);
+        // if(b<=0.00001)
+        // return 0;
+        c=GetPointDistance(PA,PB);
+        //if(c<=0.00001)
+        //return 0;//如果PA和PB坐标相同，则退出函数，并返回距离
+        //------------------------------
+        
+        if(a*a>=b*b+c*c)//--------图3--------
+        return b;      //如果是钝角返回b
+        if(b*b>=a*a+c*c)//--------图4-------
+        return a;      //如果是钝角返回a
+        
+        //图1
+        let l=(a+b+c)/2;     //周长的一半
+        let s= Math.sqrt(l*(l-a)*(l-b)*(l-c));  //海伦公式求面积，也可以用矢量求
+        return 2*s/c;
+    }
+
+    // function getLocation() {
+    //     var pos
+    //     var weather
+    //     if (navigator.geolocation) {
+    //         navigator.geolocation.getCurrentPosition(getNearest,showError);
+    //     } else { 
+    //         alert("可以拜託給個資料嗎ＱＱ")
+    //     }
+    // }
+    function showError(error)
+    {
+        switch(error.code) 
+        {
+        case error.PERMISSION_DENIED:
+        console.log("User denied the request for Geolocation.")
+        break;
+        case error.POSITION_UNAVAILABLE:
+        console.log("Location information is unavailable.")
+        break;
+        case error.TIMEOUT:
+        console.log("The request to get user location timed out.")
+        break;
+        case error.UNKNOWN_ERROR:
+        console.log("An unknown error occurred.")
+        break;
+        }
+    }
+
+    function getNearest(position){
+        var parser = new DOMParser();
+        var xmlDoc = parser.parseFromString(loadCompressedASCIIFile("https://tcgbusfs.blob.core.windows.net/blobtisv/GetVD.xml.gz"),"text/xml");
+        let max = Number.MAX_VALUE;
+        let maxNode;
+        let posi = Object();
+        posi.x = position.coords.longitude*100000;
+        posi.y =  position.coords.latitude*100000;
+        //console.log("\o",posi);
+        for (let i  = 0;i<xmlDoc.getElementsByTagName("vd:SectionDataSet")[0].childElementCount;i++){
+            let tempnode = xmlDoc.getElementsByTagName("vd:SectionDataSet")[0].children[i];
+            let p1 = Object();
+            p1.x = Number(tempnode.getElementsByTagName("vd:StartWgsX")[0].textContent)*100000;
+            p1.y = Number(tempnode.getElementsByTagName("vd:StartWgsY")[0].textContent)*100000;
+            let p2 = Object();
+            p2.x = Number(tempnode.getElementsByTagName("vd:EndWgsX")[0].textContent)*100000;
+            p2.y = Number(tempnode.getElementsByTagName("vd:EndWgsY")[0].textContent)*100000;
+            let tempdistance = GetNearestDistance(p1,p2,posi);
+            if (tempdistance<max){
+                maxnode = tempnode;
+                max = tempdistance;
+            }
+        }
+        //console.log(max);
+        //console.log(maxnode);
+    }
+
     getLocation()
 
+    function scene(scene_number,traffic){
+
+
+        fly();
+        setTimeout(fly,200);
+        setTimeout(fly,400);
+        setTimeout(fly,800);
+        setTimeout(fly,1000);
+        setTimeout(fly,1200);
+        setTimeout(fly,1400);
+        setTimeout(fly,1600);
+        setTimeout(fly,1800);
+        setTimeout(fly,2000);
+        setTimeout(fly,2200);
+        setTimeout(fly,2400);
+        setTimeout(fly,2800);
+        setTimeout(fly,3000);
+        setTimeout(fly,3200);
+        setTimeout(fly,3400);
+        setTimeout(fly,3600);
+        setTimeout(fly,3800);
+        setTimeout(fly,4000);
+    }
 })
