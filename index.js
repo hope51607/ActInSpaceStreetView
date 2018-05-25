@@ -76,14 +76,58 @@ $(document).ready(function(){
                 });
             },time+=200) 
         });
+        map.addListener('click', function(e) {
+            placeMarkerAndPanTo(e.latLng, map);
+        });
         position={lat: position.coords.latitude, lng: position.coords.longitude}
         getNearest(position);
         getWeather(position)
         getAQI(position)
     }
-
-   
-
+    var marker
+    function placeMarkerAndPanTo(latLng, map) {
+        var position={lat:latLng.lat(), lng:latLng.lng()}
+        var contentString=
+        '<div id="noDemo">'+
+        '<strong></strong>'+
+        '<p id="空氣"></p>'+
+        '<p id="天氣"></p>'+
+        '<p id="路況"></p>'+
+        '</div>'
+        var infowindow = new google.maps.InfoWindow({
+            content: contentString
+        });
+        if(marker)
+            marker.setMap(null)
+        marker = new google.maps.Marker({
+          position: latLng,
+          map: map
+        });
+        infowindow.open(map, marker);
+        map.panTo(latLng);
+    }
+    function geocodeLatLng(map) {
+        var geocoder = new google.maps.Geocoder;
+        var input = document.getElementById('latlng').value;
+        var latlngStr = input.split(',', 2);
+        var latlng = {lat: parseFloat(latlngStr[0]), lng: parseFloat(latlngStr[1])};
+        geocoder.geocode({'location': latlng}, function(results, status) {
+          if (status === 'OK') {
+            if (results[1]) {
+              var marker = new google.maps.Marker({
+                position: latlng,
+                map: map
+              });
+              infowindow.setContent(results[1].formatted_address);
+              infowindow.open(map, marker);
+            } else {
+              window.alert('No results found');
+            }
+          } else {
+            window.alert('Geocoder failed due to: ' + status);
+          }
+        });
+    }
     function getAQI(position){
         $.get({
             url:"http://opendata2.epa.gov.tw/AQI.json",
