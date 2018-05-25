@@ -1,7 +1,5 @@
 $(document).ready(function(){
     function getLocation() {
-        var pos
-        var weather
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(initMap,showError);
         } else { 
@@ -27,15 +25,13 @@ $(document).ready(function(){
     }
     
     function getWeather(position){
-        if(position==null) position=pos
-        pos=position
-        console.log("Latitude: " + position.coords.latitude + 
-        "<br>Longitude: " + position.coords.longitude)
+        // console.log("Latitude: " + position.coords.latitude + 
+        // "<br>Longitude: " + position.coords.longitude)
         url='http://api.tecyt.com/api/API0103Weather/GetCountryWeatherByLocation?longitude='+position.coords.longitude+'&latitude='+position.coords.latitude+'&weatherDataType=Hours72&weatherSupportedLanguage=ChineseTraditional'
         $.get({
             url: url,
             success:function(res){
-                console.log(res)
+                // console.log(res)
                 // $('#test').text(JSON.stringify(res))
                 now_date=new Date()
                 var contury=res[0]
@@ -43,7 +39,7 @@ $(document).ready(function(){
                 var i,mn=new Date(99999999999999),mni
                 for(i=0;i<WeatherDescription.length;i++){
                     tmpDate=new Date(WeatherDescription[i]['StartDateTime'])
-                    console.log(now_date+'\n'+tmpDate)
+                    // console.log(now_date+'\n'+tmpDate)
                     if(Math.abs(now_date-tmpDate)<mn){
                         mni=i;
                         mn=Math.abs(now_date-tmpDate)
@@ -51,8 +47,7 @@ $(document).ready(function(){
                 }
                 // console.log(mni)
                 weather=WeatherDescription[mni]['Description']
-                w
-                // console.log(weather)
+                console.log("天氣狀況: "+weather)
             },
             error:function(err){
                 console.log('QQ')
@@ -62,7 +57,6 @@ $(document).ready(function(){
     
     }
     function initMap(position) {
-        pos = position;
         var array = [{lat: position.coords.latitude, lng: position.coords.longitude}];
         var map = new google.maps.Map(document.getElementById('map'), {
             zoom: 13,
@@ -78,6 +72,29 @@ $(document).ready(function(){
             });
         });
         getNearest(position);
+        getWeather(position)
+        getAQI(position)
+    }
+
+    function getAQI(position){
+        $.get({
+            url:"http://opendata2.epa.gov.tw/AQI.json",
+            success:function(json){
+                var mn=9999999999,nowArea
+                // console.log(json)
+                json.forEach(area => {
+                    var latitude=area['Latitude'], longitude=area['Longitude']                  
+                    var dis2=(latitude-position.coords.latitude)*(latitude-position.coords.latitude)+(longitude-position.coords.longitude)*(longitude-position.coords.longitude)
+                    if(dis2<mn){
+                        mn=dis2
+                        nowArea=area
+                    }
+                });
+                // console.log(nowArea)
+                console.log('空氣品質: '+nowArea['Status'])
+
+            }
+        })
     }
 
 
@@ -227,7 +244,9 @@ $(document).ready(function(){
             }
         }
         //console.log(max);
-        //console.log(maxnode);
+        var 燈號=["綠","橘","紅"]
+        var tmp=maxnode.getElementsByTagName("vd:MOELevel")[0].textContent
+        console.log("交通狀況: " + 燈號[tmp])
     }
 
     getLocation()
