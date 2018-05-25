@@ -28,6 +28,7 @@ $(document).ready(function(){
     }
     
     function getWeather(position){
+        if(position==null) position=pos
         pos=position
         console.log("Latitude: " + position.coords.latitude + 
         "<br>Longitude: " + position.coords.longitude)
@@ -72,6 +73,7 @@ $(document).ready(function(){
             map: map
         });
     }
+
     getLocation()
 
 })
