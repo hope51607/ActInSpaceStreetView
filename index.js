@@ -27,7 +27,7 @@ $(document).ready(function(){
     function getWeather(position){
         // console.log("Latitude: " + position.coords.latitude + 
         // "<br>Longitude: " + position.coords.longitude)
-        url='http://api.tecyt.com/api/API0103Weather/GetCountryWeatherByLocation?longitude='+position.coords.longitude+'&latitude='+position.coords.latitude+'&weatherDataType=Hours72&weatherSupportedLanguage=ChineseTraditional'
+        url='http://api.tecyt.com/api/API0103Weather/GetCountryWeatherByLocation?longitude='+position.lng+'&latitude='+position.lat+'&weatherDataType=Hours72&weatherSupportedLanguage=ChineseTraditional'
         $.get({
             url: url,
             success:function(res){
@@ -71,6 +71,7 @@ $(document).ready(function(){
                alert("YAA") 
             });
         });
+        position={lat: position.coords.latitude, lng: position.coords.longitude}
         getNearest(position);
         getWeather(position)
         getAQI(position)
@@ -84,7 +85,7 @@ $(document).ready(function(){
                 // console.log(json)
                 json.forEach(area => {
                     var latitude=area['Latitude'], longitude=area['Longitude']                  
-                    var dis2=(latitude-position.coords.latitude)*(latitude-position.coords.latitude)+(longitude-position.coords.longitude)*(longitude-position.coords.longitude)
+                    var dis2=(latitude-position.lat)*(latitude-position.lat)+(longitude-position.lng)*(longitude-position.lng)
                     if(dis2<mn){
                         mn=dis2
                         nowArea=area
@@ -226,8 +227,8 @@ $(document).ready(function(){
         let max = Number.MAX_VALUE;
         let maxNode;
         let posi = Object();
-        posi.x = position.coords.longitude*100000;
-        posi.y =  position.coords.latitude*100000;
+        posi.x = position.lng*100000;
+        posi.y =  position.lat*100000;
         //console.log("\o",posi);
         for (let i  = 0;i<xmlDoc.getElementsByTagName("vd:SectionDataSet")[0].childElementCount;i++){
             let tempnode = xmlDoc.getElementsByTagName("vd:SectionDataSet")[0].children[i];
