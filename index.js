@@ -1,27 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-    <p id='test'></p>
-</body>
-</html>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script>
+$(document).ready(function(){
     function getLocation() {
         var pos
         var weather
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(getWeather,showError);
+            navigator.geolocation.getCurrentPosition(initMap,showError);
         } else { 
         }
     }
-
+    
     function showError(error)
     {
     switch(error.code) 
@@ -40,7 +26,7 @@
         break;
         }
     }
-
+    
     function getWeather(position){
         pos=position
         console.log("Latitude: " + position.coords.latitude + 
@@ -65,6 +51,7 @@
                 }
                 // console.log(mni)
                 weather=WeatherDescription[mni]['Description']
+                w
                 // console.log(weather)
             },
             error:function(err){
@@ -72,6 +59,19 @@
                 console.log(err)
             }
         })
-
+    
     }
-</script>
+    function initMap(position) {
+        var uluru = {lat: position.coords.latitude, lng: position.coords.longitude};
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 4,
+            center: uluru
+        });
+        var marker = new google.maps.Marker({
+            position: uluru,
+            map: map
+        });
+    }
+    getLocation()
+
+})
