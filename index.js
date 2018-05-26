@@ -57,7 +57,7 @@ $(document).ready(function(){
     
     }
     function initMap(position) {
-        var array = [{lat: position.coords.latitude, lng: position.coords.longitude}];
+        var array = [{lat: position.coords.latitude, lng: position.coords.longitude},{ lat:25.0337869, lng:121.5636697},{lat:25.0105137, lng: 121.5315688},{lat:25.0133917, lng: 121.5393173}];
         var map = new google.maps.Map(document.getElementById('map'), {
             zoom: 13,
             center: array[0]
@@ -71,8 +71,35 @@ $(document).ready(function(){
                     // draggable: true,
                     animation: google.maps.Animation.DROP,
                 });
-                marker.addListener('click', function() {
-                   alert("YAA") 
+                marker.addListener('click', function(jjj) {
+                    if (point.lat === 25.0337869){  //101
+                        position = point;
+                        getNearest(position);
+                        getWeather(position)
+                        getAQI(position)
+                        getNearestUbike(position)
+                        console.log("101");
+                    }else if(point.lat === 25.0105137){ //寶藏巖
+                        position = point;
+                        getNearest(position);
+                        getWeather(position)
+                        getAQI(position)
+                        getNearestUbike(position)
+                        console.log("寶藏巖");
+                    }else if(point.lat === 25.0133917){ //ubike
+                        position = point;
+                        getNearest(position);
+                        getWeather(position)
+                        getAQI(position)
+                        getNearestUbike(position)
+                        console.log("ubike")
+                    }else{                              //三創
+                        getNearest(position);
+                        getWeather(position)
+                        getAQI(position)
+                        getNearestUbike(position)
+                        console.log("三創"); 
+                    }   
                 });
             },time+=200) 
         });
@@ -80,9 +107,9 @@ $(document).ready(function(){
             placeMarkerAndPanTo(e.latLng, map);
         });
         position={lat: position.coords.latitude, lng: position.coords.longitude}
-        getNearest(position);
-        getWeather(position)
-        getAQI(position)
+        // getNearest(position);
+        // getWeather(position)
+        // getAQI(position)
     }
     var marker
     function placeMarkerAndPanTo(latLng, map) {
@@ -149,26 +176,139 @@ $(document).ready(function(){
         })
     }
 
+    var not_break = true;
 
-    function fly(){
-        let string = "<img src='auto-1941991_960_720.png' style='z-index: 1000; position: absolute; width: 20%;top: 100%; left: "+(Math.floor((Math.random()*50)-10))+"%;'>";
+    function fly0(){
+        let string = "<img src='車屁股1.png' style='z-index: 4000; position: absolute; width: 70%;top: 100%; left: "+(Math.floor((Math.random()*130)-150))+"%;'>";
         //console.log(string);
         let newCar =  $( string );
-        newCar.appendTo('div');
+        newCar.appendTo('body');
         //console.log(newCar[0].parentElement);
         Velocity(newCar[0], {
-            top : 580,
-            left : 350,
-            width: 0,
+            top : '75%',
+            left : '120%',
+            width: '10%',
         }, {
             duration: 4000,
             easing: [ 0.3, 0.5, 0.83, 0.67 ],
+            begin: function(elements){     // 动画开始时的回调函数
+                if (!not_break){
+                    elements[0].remove();    
+                }
+            },
+            progress: function(elements){
+                if (!not_break){
+                    elements[0].remove();    
+                }
+            },
             complete: function(elements) {
                 elements[0].remove();
-                fly();
+                if (not_break){
+                    fly0();
+                }
             }
         });
     }
+
+    $('#scene_zero').click(() => {
+        not_break = false;
+        $('#myCanvas').css({"visibility":"hidden"});
+        $('#scene_zero').css({"visibility":"hidden"});
+        $('#scene_one').css({"visibility":"hidden"});
+        $('#scene_two').css({"visibility":"hidden"});
+        $('#scene_three').css({"visibility":"hidden"});
+    })
+
+    function fly1(){
+        let string = "<img src='車屁股1.png' style='z-index: 4000; position: absolute; width: 70%;top: 100%; left: "+(Math.floor((Math.random()*130)-150))+"%;'>";
+        //console.log(string);
+        let newCar =  $( string );
+        newCar.appendTo('body');
+        //console.log(newCar[0].parentElement);
+        Velocity(newCar[0], {
+            top : '90%',
+            left : '120%',
+            width: '10%',
+        }, {
+            duration: 4000,
+            easing: [ 0.3, 0.5, 0.83, 0.67 ],
+            begin: function(elements){     // 动画开始时的回调函数
+                if (!not_break){
+                    elements[0].remove();    
+                }
+            },
+            progress: function(elements){
+                if (!not_break){
+                    elements[0].remove();    
+                }
+            },
+            complete: function(elements) {
+                elements[0].remove();
+                if (not_break){
+                    fly1();
+                }
+            }
+        });
+    }
+
+    $('#myCanvas').click(() => {
+        not_break = false;
+        $('#myCanvas').css({"visibility":"hidden"});
+        $('#scene_zero').css({"visibility":"hidden"});
+        $('#scene_one').css({"visibility":"hidden"});
+        $('#scene_two').css({"visibility":"hidden"});
+        $('#scene_three').css({"visibility":"hidden"});
+    })
+
+    $('#scene_two').click(() => {
+        // /not_break = false;
+        $('#myCanvas').css({"visibility":"hidden"});
+        $('#scene_zero').css({"visibility":"hidden"});
+        $('#scene_one').css({"visibility":"hidden"});
+        $('#scene_two').css({"visibility":"hidden"});
+        $('#scene_three').css({"visibility":"hidden"});
+    })
+
+    function fly3(){
+        let string = "<img src='車屁股1.png' style='z-index: 4000; position: absolute; width: 65%;top: 80%; left: "+(Math.floor((Math.random()*130)-250))+"%;'>";
+        //console.log(string);
+        let newCar =  $( string );
+        newCar.appendTo('body');
+        //console.log(newCar[0].parentElement);
+        Velocity(newCar[0], {
+            top : '50%',
+            left : '200%',
+            width: '10%',
+        }, {
+            duration: 4000,
+            easing: [ 0.3, 0.5, 0.83, 0.67 ],
+            begin: function(elements){     // 动画开始时的回调函数
+                if (!not_break){
+                    elements[0].remove();    
+                }
+            },
+            progress: function(elements){
+                if (!not_break){
+                    elements[0].remove();    
+                }
+            },
+            complete: function(elements) {
+                elements[0].remove();
+                if (not_break){
+                    fly3();
+                }
+            }
+        });
+    }
+
+    $('#scene_three').click(() => {
+        not_break = false;
+        $('#myCanvas').css({"visibility":"hidden"});
+        $('#scene_zero').css({"visibility":"hidden"});
+        $('#scene_one').css({"visibility":"hidden"});
+        $('#scene_two').css({"visibility":"hidden"});
+        $('#scene_three').css({"visibility":"hidden"});
+    })
 
     function loadCompressedASCIIFile(request_url) {
 
@@ -298,6 +438,15 @@ $(document).ready(function(){
         //console.log(max);
         var 燈號=["綠","橘","紅"]
         var tmp=maxnode.getElementsByTagName("vd:MOELevel")[0].textContent
+        if (position.lat === 25.0337869){  //101
+            scene(1,Number(tmp))
+        }else if(position.lat === 25.0105137){ //寶藏巖
+            scene(2,Number(tmp))
+        }else if(position.lat === 25.0133917){ //ubike
+            scene(3,Number(tmp))
+        }else{                              //三創
+            scene(0,Number(tmp))
+        }
         console.log("交通狀況: " + 燈號[tmp])
     }
 
@@ -321,8 +470,8 @@ $(document).ready(function(){
         let max = Number.MAX_VALUE;
         let maxNode;
         let posi = Object();
-        posi.x = position.coords.longitude;
-        posi.y =  position.coords.latitude;
+        posi.x = position.lng;
+        posi.y =  position.lat;
         for(let attr in ubike.retVal) {
             let temp = Math.pow((Number(ubike.retVal[attr].lng) - posi.x),2) + Math.pow((Number(ubike.retVal[attr].lat) - posi.y),2)
             if (temp < max){
@@ -335,27 +484,118 @@ $(document).ready(function(){
 
     getLocation()
 
-    function scene(scene_number,traffic){
-
-
-        fly();
-        setTimeout(fly,200);
-        setTimeout(fly,400);
-        setTimeout(fly,800);
-        setTimeout(fly,1000);
-        setTimeout(fly,1200);
-        setTimeout(fly,1400);
-        setTimeout(fly,1600);
-        setTimeout(fly,1800);
-        setTimeout(fly,2000);
-        setTimeout(fly,2200);
-        setTimeout(fly,2400);
-        setTimeout(fly,2800);
-        setTimeout(fly,3000);
-        setTimeout(fly,3200);
-        setTimeout(fly,3400);
-        setTimeout(fly,3600);
-        setTimeout(fly,3800);
-        setTimeout(fly,4000);
+    function scene(scene_number ,traffic){
+        switch(scene_number){
+            case 0: //三創
+                not_break = true;
+                fly0();
+                $('#scene_zero').css({"visibility":""});
+                switch(traffic){
+                    case 0:
+                        for(let i =200;i<=4000;i+=200){
+                            setTimeout(fly0,i);
+                        }
+                        break;
+                    case 1:
+                        for(let i =400;i<=4000;i+=400){
+                            setTimeout(fly0,i);
+                        }
+                        break;
+                    case 2:
+                        for(let i =800;i<=4000;i+=800){
+                            setTimeout(fly0,i);
+                        }
+                        break;
+                }
+                break;
+            case 1: //101
+                $('#myCanvas').css({"visibility":""});
+                not_break = true;
+                fly1();
+                $('#scene_one').css({"visibility":""});
+                switch(traffic){
+                    case 0:
+                        for(let i =200;i<=4000;i+=200){
+                            setTimeout(fly1,i);
+                        }
+                        break;
+                    case 1:
+                        for(let i =400;i<=4000;i+=400){
+                            setTimeout(fly1,i);
+                        }
+                        break;
+                    case 2:
+                        for(let i =800;i<=4000;i+=800){
+                            setTimeout(fly1,i);
+                        }
+                        break;
+                }
+                break;
+            case 2: //寶藏巖
+                // not_break = true;
+                // fly2();
+                $('#scene_two').css({"visibility":""});
+                // switch(traffic){
+                //     case 0:
+                //         for(let i =200;i<=4000;i+=200){
+                //             setTimeout(fly2,i);
+                //         }
+                //         break;
+                //     case 1:
+                //         for(let i =400;i<=4000;i+=400){
+                //             setTimeout(fly2,i);
+                //         }
+                //         break;
+                //     case 2:
+                //         for(let i =800;i<=4000;i+=800){
+                //             setTimeout(fly2,i);
+                //         }
+                //         break;
+                // }
+                break;
+            case 3: //ubike
+                not_break = true;
+                fly3();
+                $('#scene_three').css({"visibility":""});
+                switch(traffic){
+                    case 0:
+                        for(let i =200;i<=4000;i+=200){
+                            setTimeout(fly3,i);
+                        }
+                        break;
+                    case 1:
+                        for(let i =400;i<=4000;i+=400){
+                            setTimeout(fly3,i);
+                        }
+                        break;
+                    case 2:
+                        for(let i =800;i<=4000;i+=800){
+                            setTimeout(fly3,i);
+                        }
+                        break;
+                }
+                break;
+            case 4: //?
+                not_break = true;
+                fly4();
+                switch(traffic){
+                    case 0:
+                        for(let i =200;i<=4000;i+=200){
+                            setTimeout(fly4,i);
+                        }
+                        break;
+                    case 1:
+                        for(let i =400;i<=4000;i+=400){
+                            setTimeout(fly4,i);
+                        }
+                        break;
+                    case 2:
+                        for(let i =800;i<=4000;i+=800){
+                            setTimeout(fly4,i);
+                        }
+                        break;
+                }
+                break;
+        }
     }
 })

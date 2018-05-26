@@ -12,14 +12,14 @@ var maxVelocity = 2;
 var targetFPS = 33;
 
 // Set the dimensions of the canvas as variables so they can be used.
-document.getElementById('myCanvas').width = document.body.clientWidth;
-document.getElementById('myCanvas').height = window.innerHeight;
+// document.getElementById('myCanvas').width = document.body.clientWidth;
+// document.getElementById('myCanvas').height = window.innerHeight;
 var canvasWidth = document.body.clientWidth;
 var canvasHeight = window.innerHeight;
 
 document.body.onresize = function(){
-    document.getElementById('myCanvas').width = document.body.clientWidth;
-    document.getElementById('myCanvas').height = window.innerHeight;
+    // document.getElementById('myCanvas').width = document.body.clientWidth;
+    // document.getElementById('myCanvas').height = window.innerHeight;
     canvasWidth = document.body.clientWidth;
     canvasHeight = window.innerHeight;
 };
@@ -186,4 +186,4 @@ function update() {
 }
 
 // Initialize the scene
-//init();
+smoke_init();
