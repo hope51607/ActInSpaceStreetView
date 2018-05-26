@@ -65,7 +65,7 @@ $(document).ready(function(){
     
     }
     function initMap(position) {
-        var array = [{lat: position.coords.latitude, lng: position.coords.longitude},{ lat:25.0337869, lng:121.5636697},{lat:25.0105137, lng: 121.5315688},{lat:25.0133917, lng: 121.5393173}];
+        var array = [{lat: 25.045334399999998, lng: 121.53317009999999, scene: 0},{ lat:25.0337869, lng:121.5636697, scene: 1},{lat:25.0105137, lng: 121.5315688, scene: 2},{lat:25.0133917, lng: 121.5393173, scene: 3}];
         var map = new google.maps.Map(document.getElementById('map'), {
             zoom: 13,
             center: array[0]
@@ -80,41 +80,48 @@ $(document).ready(function(){
                     animation: google.maps.Animation.DROP,
                 });
                 marker.addListener('click', function(jjj) {
-                    if (point.lat === 25.0337869){  //101
-                        position = point;
-                        getNearest(position);
-                        getWeather(position)
-                        getAQI(position)
-                        getNearestUbike(position)
-                        console.log("101");
-                    }else if(point.lat === 25.0105137){ //寶藏巖
-                        position = point;
-                        getNearest(position);
-                        getWeather(position)
-                        getAQI(position)
-                        getNearestUbike(position)
-                        console.log("寶藏巖");
-                    }else if(point.lat === 25.0133917){ //ubike
-                        position = point;
-                        getNearest(position);
-                        getWeather(position)
-                        getAQI(position)
-                        getNearestUbike(position)
-                        console.log("ubike")
-                    }else{                              //三創
-                        getNearest(position);
-                        getWeather(position)
-                        getAQI(position)
-                        getNearestUbike(position)
-                        console.log("三創"); 
-                    }   
+                    position = point;                   //三創
+                    getNearest(position);
+                    getWeather(position)
+                    getAQI(position)
+                    getNearestUbike(position)
+                    // if (point.scene === 1){  //101
+                    //     position = point;
+                    //     getNearest(position);
+                    //     getWeather(position)
+                    //     getAQI(position)
+                    //     getNearestUbike(position)
+                    //     console.log("101");
+                    // }else if(point.lat === 25.0105137){ //寶藏巖
+                    //     position = point;
+                    //     getNearest(position);
+                    //     getWeather(position)
+                    //     getAQI(position)
+                    //     getNearestUbike(position)
+                    //     console.log("寶藏巖");
+                    // }else if(point.lat === 25.0133917){ //ubike
+                    //     position = point;
+                    //     getNearest(position);
+                    //     getWeather(position)
+                    //     getAQI(position)
+                    //     getNearestUbike(position)
+                    //     console.log("ubike")
+                    // }else{ 
+                    //     position = point;                   //三創
+                    //     getNearest(position);
+                    //     getWeather(position)
+                    //     getAQI(position)
+                    //     getNearestUbike(position)
+                    //     console.log("三創"); 
+                    // }   
                 });
             },time+=200) 
         });
         map.addListener('click', function(e) {
             placeMarkerAndPanTo(e.latLng, map);
         });
-        position={lat: position.coords.latitude, lng: position.coords.longitude}
+        //console.log("",position);
+        //position={lat: position.coords.latitude, lng: position.coords.longitude}
         // getNearest(position);
         // getWeather(position)
         // getAQI(position)
