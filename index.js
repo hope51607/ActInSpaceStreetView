@@ -83,6 +83,7 @@ $(document).ready(function(){
                 marker.addListener('click', function(jjj) {
                     console.log("please")
                     position = point;                   //三創
+                    $('#ha').remove();
                     getNearest(position);
                     getWeather(position)
                     getAQI(position)
@@ -121,6 +122,7 @@ $(document).ready(function(){
         });
         map.addListener('click', function(e) {
             placeMarkerAndPanTo(e.latLng, map);
+            $('#ha').remove();
         });
         //console.log("",position);
         //position={lat: position.coords.latitude, lng: position.coords.longitude}
@@ -244,6 +246,7 @@ $(document).ready(function(){
         $('#scene_one').css({"visibility":"hidden"});
         $('#scene_two').css({"visibility":"hidden"});
         $('#scene_three').css({"visibility":"hidden"});
+        $('#ha').remove();
     })
 
     function fly1(){
@@ -285,6 +288,7 @@ $(document).ready(function(){
         $('#scene_one').css({"visibility":"hidden"});
         $('#scene_two').css({"visibility":"hidden"});
         $('#scene_three').css({"visibility":"hidden"});
+        $('#ha').remove();
     })
 
     $('#scene_two').click(() => {
@@ -294,6 +298,7 @@ $(document).ready(function(){
         $('#scene_one').css({"visibility":"hidden"});
         $('#scene_two').css({"visibility":"hidden"});
         $('#scene_three').css({"visibility":"hidden"});
+        $('#ha').remove();
     })
 
     function fly3(){
@@ -335,6 +340,7 @@ $(document).ready(function(){
         $('#scene_one').css({"visibility":"hidden"});
         $('#scene_two').css({"visibility":"hidden"});
         $('#scene_three').css({"visibility":"hidden"});
+        $('#ha').remove();
     })
 
     function loadCompressedASCIIFile(request_url) {
@@ -508,6 +514,15 @@ $(document).ready(function(){
                 maxNode = ubike.retVal[attr];
             }
         }
+        let tempstring = "<div id='ha' style='z-index: 4000; position: absolute; background-color: white; opacity: 0.7; border-radius:15px;left: 7px;top: 7px;'>"+
+            "<p>最近ubike站</p>"+
+            "<p>站牌名稱："+maxNode.ar+"</p>"+
+            "<p>剩餘車位："+maxNode.bemp+"</p>"+
+            "<p>距離："+getTwoPointDistance(position.lat, position.lng, Number(maxNode.lat), Number(maxNode.lng))+"m</p>"
+        "</div>";
+        console.log(tempstring);
+        let newbox =  $( tempstring );
+        newbox.prependTo('body');
         console.log("",maxNode);
     }
 
@@ -519,39 +534,6 @@ $(document).ready(function(){
                 not_break = true;
                 fly0();
                 $('#scene_zero').css({"visibility":""});
-
-                // for (let i = 0;i<10;i++){
-                //     let string = "<img src='小人.png' style='z-index: 4000; position: absolute; width: 65%;top: 80%; left: "+(Math.floor((Math.random()*130)-250))+"%;'>";
-                //     //console.log(string);
-                //     let newCar =  $( string );
-                //     newCar.appendTo('body');
-                //     //console.log(newCar[0].parentElement);
-                //     Velocity(newCar[0], {
-                //         top : '50%',
-                //         left : '200%',
-                //         width: '10%',
-                //     }, {
-                //         duration: 100,
-                //         easing: [ 0.3, 0.5, 0.83, 0.67 ],
-                //         begin: function(elements){     // 动画开始时的回调函数
-                //             if (!not_break){
-                //                 elements[0].remove();    
-                //             }
-                //         },
-                //         progress: function(elements){
-                //             if (!not_break){
-                //                 elements[0].remove();    
-                //             }
-                //         },
-                //         complete: function(elements) {
-                //             elements[0].remove();
-                //             if (not_break){
-                //                 fly3();
-                //             }
-                //         }
-                //     });
-                // }
-                
                 switch(traffic){
                     case 0:
                         for(let i =200;i<=4000;i+=200){
@@ -660,4 +642,17 @@ $(document).ready(function(){
                 break;
         }
     }
+
+    //credit: https://itbilu.com/javascript/js/NJWhVH3Z-.html
+    function getTwoPointDistance(lat1, lng1, lat2, lng2) { 
+        var dis = 0;
+        var radLat1 = toRadians(lat1);
+        var radLat2 = toRadians(lat2);
+        var deltaLat = radLat1 - radLat2;
+        var deltaLng = toRadians(lng1) - toRadians(lng2);
+        var dis = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(deltaLat / 2), 2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(deltaLng / 2), 2)));
+        return dis * 6378137;
+    
+        function toRadians(d) {  return d * Math.PI / 180;}
+    } 
 })
