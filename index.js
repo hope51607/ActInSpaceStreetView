@@ -114,9 +114,11 @@ $(document).ready(function(){
           if (status === 'OK') {
             if (results[0]) {
                 // console.log(results)
+                var time=0
                 while(!(check.天氣&&check.空氣&&check.路況)){
-                    
+                    time++
                     console.log(check)
+                    if(time>20)break
                 }
                 check.天氣=check.空氣=check.路況=false
                 var contentString=
@@ -127,7 +129,8 @@ $(document).ready(function(){
                 '<p id="路況">'+路況+'</p>'+
                 '</div>'
                 var infowindow = new google.maps.InfoWindow({
-                    content: contentString
+                    content: contentString,
+                    maxWidth: '200'
                 });
                 infowindow.open(map, marker);
                 map.panTo(latlng);
