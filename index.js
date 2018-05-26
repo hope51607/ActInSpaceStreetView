@@ -1,4 +1,5 @@
 $(document).ready(function(){
+    $('html').fadeIn(3000)
     var 天氣,空氣,路況
     var check={
         '天氣':false,
