@@ -80,6 +80,7 @@ $(document).ready(function(){
                     animation: google.maps.Animation.DROP,
                 });
                 marker.addListener('click', function(jjj) {
+                    console.log("please")
                     position = point;                   //三創
                     getNearest(position);
                     getWeather(position)
@@ -469,7 +470,7 @@ $(document).ready(function(){
             scene(2,Number(tmp))
         }else if(position.lat === 25.0133917){ //ubike
             scene(3,Number(tmp))
-        }else{                              //三創
+        }else if(position.lat === 25.045334399999998){                              //三創
             scene(0,Number(tmp))
         }
         console.log("交通狀況: " + 燈號[tmp])
@@ -517,6 +518,39 @@ $(document).ready(function(){
                 not_break = true;
                 fly0();
                 $('#scene_zero').css({"visibility":""});
+
+                // for (let i = 0;i<10;i++){
+                //     let string = "<img src='小人.png' style='z-index: 4000; position: absolute; width: 65%;top: 80%; left: "+(Math.floor((Math.random()*130)-250))+"%;'>";
+                //     //console.log(string);
+                //     let newCar =  $( string );
+                //     newCar.appendTo('body');
+                //     //console.log(newCar[0].parentElement);
+                //     Velocity(newCar[0], {
+                //         top : '50%',
+                //         left : '200%',
+                //         width: '10%',
+                //     }, {
+                //         duration: 100,
+                //         easing: [ 0.3, 0.5, 0.83, 0.67 ],
+                //         begin: function(elements){     // 动画开始时的回调函数
+                //             if (!not_break){
+                //                 elements[0].remove();    
+                //             }
+                //         },
+                //         progress: function(elements){
+                //             if (!not_break){
+                //                 elements[0].remove();    
+                //             }
+                //         },
+                //         complete: function(elements) {
+                //             elements[0].remove();
+                //             if (not_break){
+                //                 fly3();
+                //             }
+                //         }
+                //     });
+                // }
+                
                 switch(traffic){
                     case 0:
                         for(let i =200;i<=4000;i+=200){
