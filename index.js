@@ -6,11 +6,12 @@ $(document).ready(function(){
         '路況':false
     }
     function getLocation() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(initMap,showError);
-        } else { 
-            alert("可以拜託給個資料嗎ＱＱ");
-        }
+        initMap()
+        // if (navigator.geolocation) {
+        //     navigator.geolocation.getCurrentPosition(initMap,showError);
+        // } else { 
+        //     alert("可以拜託給個資料嗎ＱＱ");
+        // }
     }
     
     function showError(error){
@@ -533,6 +534,33 @@ $(document).ready(function(){
                 not_break = true;
                 fly0();
                 $('#scene_zero').css({"visibility":""});
+                for (let i = 0;i<30;i++){
+                    let littleman = $("<img src='小人.png' style='z-index: 4000; position: absolute; width: 5%;top: 75%; left: "+(Math.floor((Math.random()*60)+230))+"%;'>")
+                    littleman.appendTo('body');
+                    Velocity(littleman[0], {
+                        left : '200%'
+                    }, {
+                        duration: (Math.floor((Math.random()*250)+500)),
+                        easing: [ 0.3, 0.5, 0.83, 0.67 ],
+                        loop: true ,
+                        begin: function(elements){     // 动画开始时的回调函数
+                            if (!not_break){
+                                elements[0].remove();    
+                            }
+                        },
+                        progress: function(elements){
+                            if (!not_break){
+                                elements[0].remove();    
+                            }
+                        },
+                        complete: function(elements) {
+                            elements[0].remove();
+                            if (not_break){
+                                fly1();
+                            }
+                        }
+                    });
+                }
                 switch(traffic){
                     case 0:
                         for(let i =200;i<=4000;i+=200){
